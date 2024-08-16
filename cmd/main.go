@@ -6,6 +6,9 @@ import (
 	"China_Telecom_Monitor/tools"
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"github.com/golang-module/carbon/v2"
 	"github.com/kataras/iris/v12"
 	"github.com/robfig/cron/v3"
@@ -28,6 +31,8 @@ func main() {
 		return
 	}
 
+	createFolder()
+
 	initLogger()
 
 	if checkFlag() {
@@ -40,6 +45,15 @@ func main() {
 	go cronSummary()
 
 	initIris()
+}
+
+// 创建文件夹
+func createFolder() {
+	dataDir := filepath.Join(configs.DataPath, "log")
+	err := os.MkdirAll(dataDir, os.ModePerm)
+	if err != nil {
+		panic(fmt.Sprintf("创建数据目录失败: %v", err))
+	}
 }
 
 // 初始化配置
@@ -90,7 +104,7 @@ func initLogger() {
 	//stderr := configs.DataPath + "/log/stderr.log"
 
 	stdout := &lumberjack.Logger{
-		Filename:   configs.DataPath + "/log/stdout.log",
+		Filename:   filepath.Join(configs.DataPath, "log", "stdout.log"),
 		MaxSize:    10, // 每个日志文件的最大大小，单位为MB
 		MaxBackups: 10, // 保留的旧日志文件的最大数量
 		MaxAge:     60, // 保留的旧日志文件的最大天数
