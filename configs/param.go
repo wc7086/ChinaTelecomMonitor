@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var Prot string
+var Port string
 var Username string
 var Password string
 var LoginIntervalTime int
@@ -20,6 +20,8 @@ var LogEncoding string
 var Dev bool
 
 var PrintVersion bool
+
+var ClientVersion string
 
 var Summary models.Summary
 
